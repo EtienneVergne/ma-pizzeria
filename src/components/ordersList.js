@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBillWave } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import {Link} from 'react-router-dom';
 
 
 class ordersList  extends Component {
     state = { 
-        listOrders: this.props.orderList
+        listOrders: this.props.listOrders
      }
 
      
@@ -15,23 +20,21 @@ class ordersList  extends Component {
     render() { 
         console.log (this.state)
         const ordersDisplay = this.state.listOrders.map( (item) => {
-            const status = "En attente de paiement";
-            if (item.isPaid = true){
-                status = "Réglé";
-            }
+            let status = item.isPaid ? "Régle":"En attente de paiement";
             
             return (
                 <tr>
                 <td>Commande N°{item.number}</td>
                 <td>{item.total}€</td>
                 <td>{status}</td>
+                <td><FontAwesomeIcon icon={faMoneyBillWave}/><FontAwesomeIcon icon = {faTrash}/></td>
                 </tr>
             )
         });
 
         return (
             <div className="ban">
-                <h1>Pizza Reflex</h1>
+                <Link to={"/"}><FontAwesomeIcon icon={ faArrowLeft}/></Link> <h1>Pizza Reflex</h1>
                 <div className="orderstab">
                     <h1>Liste des commandes</h1>
                     <table>
@@ -39,6 +42,7 @@ class ordersList  extends Component {
                             <td>N°</td>
                             <td>Total commande</td>
                             <td>Statut commande</td>
+                            <td>Actions</td>
                         </tr>
                         {ordersDisplay}
                         
@@ -53,10 +57,10 @@ class ordersList  extends Component {
 const mapStateToProps = (state) => {
        
     return {
-            orderList: state.orderList
+            listOrders: state.orderList
     };
  };
 
 
  
-export default connect (mapStateToProps) (ordersList) ;
+export default connect (mapStateToProps, null) (ordersList) ;

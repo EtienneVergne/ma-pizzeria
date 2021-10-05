@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavItem } from 'react-bootstrap';
 import menu from './menu';
 import { connect } from 'react-redux';
-//5import numberOrder from './newOrder';
+import {Link} from 'react-router-dom';
 import { addOrder} from '../action'
 
 class getOrder extends Component {
@@ -23,7 +23,6 @@ class getOrder extends Component {
     const menu = [...this.state.menu];
     let total = this.state.total;
     const pizza = menu[index];
-    console.log(pizza);
     let ind = order.findIndex((item) => 
        item.article == pizza.name
     
@@ -37,18 +36,14 @@ class getOrder extends Component {
         total = total + order[ind].price
     }
     
-    
-    
-
-
     this.setState({
         order:order,
         total:total
         
     })
+    
     console.log("youpiii");
-    console.log(this.state.total);
-    console.log(this.state.order);
+    console.log(this.state);
 
     }
 
@@ -72,11 +67,13 @@ class getOrder extends Component {
 
         const currentOrder = [...this.state.order]
 
+  
+
         const orderDisplay = currentOrder.map((item) => {
            
             
             let price = item.price*item.volume;
-           console.log(price);
+      
         
             return (
                 <div>
@@ -104,7 +101,7 @@ class getOrder extends Component {
                    <h2>Soit un total de {this.state.total} € </h2>
                </div>
                <div className="recordOrder">
-                   <button onclick={() => this.props.addOrder(this.state)}>Enregistrer et lancer la commande</button>
+                  <Link to={"/orderslist"}> <button onClick={() => this.props.addOrder(this.state)}>Enregistrer et lancer la commande</button></Link>
                    </div>
               </div>
           </div>
@@ -114,13 +111,20 @@ class getOrder extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = (state) => {
     return {
-        addOrder: (item) => {
+        listOrders: state.orderList
+    }
+};
+
+
+ const mapDispatchToProps = dispatch => {
+    return {
+        addOrder : item => {
             dispatch(addOrder(item));
         }
     }
-}
+}  
  
-export default connect ( mapDispatchToProps) (getOrder);
+export default connect ( mapDispatchToProps,mapDispatchToProps) (getOrder);
 
